@@ -52,6 +52,7 @@ module Fontcustom
         files.each do |file|
           name = File.basename file, ".svg"
           name = name.strip.gsub(/\W/, "-")
+          name.gsub!(/\A\d+_/, '') if @options[:input][:drop_number_prefix]
           glyphs[name.to_sym] = { :source => file }
           if File.read(file).include? "rgba"
             say_message :warn, "`#{file}` contains transparency and will be skipped."
@@ -60,7 +61,7 @@ module Fontcustom
 
         # Dir.glob returns a different order depending on ruby
         # version/platform, so we have to sort it first
-        glyphs = Hash[glyphs.sort_by { |key, val| key.to_s }]
+        glyphs = Hash[glyphs.sort_by { |key, val| val[:source] }]
         glyphs.each do |name, data|
           if manifest_glyphs.has_key? name
            data[:codepoint] = manifest_glyphs[name][:codepoint]
