@@ -134,9 +134,10 @@ module Fontcustom
           end
           say_message :warn, "`font_face(:#{style})` is deprecated. Use `font_face(url:'url', path:'path')` instead."
         else
-          style = {:url => "url", :path => @font_path}.merge(style)
+          style = {:url => "url", :path => @font_path, :display => 'swap'}.merge(style)
           url = style[:url]
           path = style[:path]
+          display = style[:display]
         end
 
         # Bulletproof @Font-Face <http://www.fontspring.com/blog/the-new-bulletproof-font-face-syntax>
@@ -147,6 +148,7 @@ module Fontcustom
   src: #{url}("#{path}.eot?") format("embedded-opentype");
   font-weight: normal;
   font-style: normal;
+  font-display: #{display};
 }
 
 @font-face {
@@ -157,6 +159,7 @@ module Fontcustom
        #{url}("#{path}.svg##{font_name}") format("svg");
   font-weight: normal;
   font-style: normal;
+  font-display: #{display};
 }|
         else
         string = %Q|@font-face {
@@ -169,6 +172,7 @@ module Fontcustom
        #{url}("#{path}.svg##{font_name}") format("svg");
   font-weight: normal;
   font-style: normal;
+  font-display: #{display};
 }|
         end
 
